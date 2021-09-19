@@ -1,7 +1,6 @@
 var readAll = function(filePath,charset){
   var adTypeText = 2;
   var adReadAll = -1; //全行モード
-  // var adReadLine = -2; //行単位モード
   var adCRLF = -1;
   var stream = new ActiveXObject("ADODB.Stream");
   stream.type = adTypeText;

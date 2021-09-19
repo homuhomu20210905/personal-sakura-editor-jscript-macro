@@ -7,17 +7,17 @@
         this.description = {};
     }
     
-    Sakura.getRunningTimeMs = function(){
-        var endTime = (new Date()).getTime();
-        return endTime - startTime;
-    }
-    
     puts = function(value){
         Editor.TraceOut(value);
-        //蟶ｸ縺ｫ陦ｨ遉ｺ
+        //常に表示
         Editor.ActivateWinOutput();
     }
         
+    echo = function(value){
+        Editor.TraceOut(value,0x02);
+        //常に表示
+        Editor.ActivateWinOutput();
+    }
     Sakura.maxLineCount = function(){
         return Editor.GetLineCount(0) + 1;
     }
@@ -78,7 +78,7 @@
         var others = [];
         this.lines(function(strLine,i,origin){
              result.push(strLine);
-             others.push({strLine:strLine,i:i+1,origin:origin});
+             others.push({line:strLine,no:i+1,origin:origin});
         });
         callBack(result,others);
         return this;
@@ -116,9 +116,27 @@
         }
     }
     
+    var setDescription = function(callBack){
+        callBack.call(this.description,this.description);
+        return this;
+    }
+
+    //変数定義をローカルで完結させる為の呼び出し。
+    Sakura.prototype.dataSet = setDescription
+    Sakura.prototype.result  = setDescription
 
     JSON.parse = function(value){
        var func = new Function("return " + value);
        return func();
+    }
+
+    Sakura.getRunningTimeMs = function(){
+        var endTime = (new Date()).getTime();
+        return endTime - startTime;
+    }
+    
+    Sakura.putsRunningTime = function(){
+        var second = Math.round(Sakura.getRunningTimeMs() / 100) / 10;
+        puts("処理時間：" + second + "秒");
     }
 })()

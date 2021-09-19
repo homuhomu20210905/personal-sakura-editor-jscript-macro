@@ -20,7 +20,7 @@
             if (arrayParam[i] != "" && arrayParam[i] != null && typeof arrayParam[i] !== "undefined") 
             {
                 var head = arrayParam[i].substring(0, 1).toUpperCase()
-                if(topUpper && i == 0){
+                if(!topUpper && i == 0){
                     head = head.toLowerCase();
                 }
                 
@@ -31,10 +31,10 @@
         return strResult;
     }
     util.camel = function(value){
-        return caseType(value,true);
+        return caseType(value,false);
     }
     util.pascal = function(value){
-        return caseType(value,false);
+        return caseType(value,true);
     }
     util.snake = function(value){
         return value.substring(0, 1) + value.substring(1).replace(/([A-Z])/g, "_$1");
@@ -53,6 +53,16 @@
         obj.set    = util.setter(value);
         obj.get    = util.getter(value);
         return obj;
+    }
+    
+    util.template = function(obj){
+        if(!(obj instanceof Function)){
+            return null;
+        }
+        var list = obj.toString().split("\r\n");
+        list.pop();
+        list.shift();
+        return list.join("\r\n")
     }
 
 })();
