@@ -25,23 +25,28 @@ function setCookieData(keyId,data){
 
 //iniファイルからマクロのHOME_DIRECTORYを取得
 (function loadMacroHomeDir(){
+    var cookie = Editor.getCookie("document","szMACROFOLDER")
+    if(cookie){
+       //自身のファイルを開き直した場合のみ取得可能。(タブ別管理）
+       szMACROFOLDER = cookie;
+       return;
+    }
     var SAKURA_INI_FILE = Editor.ExpandParameter("$I");
     var SAKURA_INI_PATH = SAKURA_INI_FILE.replace(/([A-Z]:.*\\).*/g,'$1');
     var MACRO_DIR_FILE = SAKURA_INI_PATH + "MACRO_DIR.ini"
     var fs = new ActiveXObject( "Scripting.FileSystemObject" );
     if(!fs.FileExists(MACRO_DIR_FILE)){
-       var command = 'type "' + SAKURA_INI_FILE + '"|FINDSTR szMACROFOLDER>' + '"' + MACRO_DIR_FILE + '"';
-       ExecCommand(command);
+       // var command = 'type "' + SAKURA_INI_FILE + '"|FINDSTR szMACROFOLDER>' + '"' + MACRO_DIR_FILE + '"';
+       var command = 'cd .. && (cd > "' + MACRO_DIR_FILE + '") && echo 初期設定完了'
+       Editor.ExecCommand(command,0x01);
     }
     //変数取得
-    var textObj = fs.OpenTextFile(MACRO_DIR_FILE.split("\\").join("/"),1);
-    var value = textObj.ReadAll()
-    value = value.split(/[\r\n]/g).join("")
-               .replace("=",'="')
-               .split("\\").join("/")
-               + '"'
-    eval(value);
-    szMACROFOLDER = szMACROFOLDER.replace(/(.*)\//g,"$1");
+    var value = readAll(MACRO_DIR_FILE).split(/[\r\n]/g).join("")
+                .split("\\").join("/")
+    eval('szMACROFOLDER = "' + value + '"');
+    szMACROFOLDER = szMACROFOLDER.substring(0,szMACROFOLDER.length);
+    //cookieの保存
+    Editor.setCookie("document","szMACROFOLDER",szMACROFOLDER)
 })();
 
 (function(){
