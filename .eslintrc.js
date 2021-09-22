@@ -13,13 +13,13 @@ module.exports = {
     "globals":{
         'ActiveXObject':true,
         'Editor':true,
-        'GetCookie':true,
         'Sakura':true,
         'JSON':true,
-        'adReadLine':true,
         'module':true,
         'puts':true,
         'echo':true,
         'util':true,
+        'JavaUtil':true,
+        'szMACROFOLDER':true,
     }
 };

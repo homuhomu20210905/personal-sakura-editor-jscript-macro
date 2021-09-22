@@ -1,0 +1,9 @@
+//sample data
+ŒÚ‹qID	customer_id
+ŒÚ‹q–¼	customer_name
+—X•Ö”Ô†	postal_code
+“s“¹•{Œ§	prefectures
+s‹æ’¬‘º	city
+‚»‚Ì‘¼ZŠ	other_address
+“d˜b”Ô†	phone_number
+ƒ[ƒ‹ƒAƒhƒŒƒX	email_address
