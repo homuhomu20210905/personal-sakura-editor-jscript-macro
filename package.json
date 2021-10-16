@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ext \".js\" --ignore-path .gitignore ."
+    "lint": "eslint --ext \".js\" --ignore-path .gitignore .",
+    "test": "jest",
+    "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "jest": "^27.2.5"
   }
 }

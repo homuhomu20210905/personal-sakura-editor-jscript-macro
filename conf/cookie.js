@@ -1,3 +1,4 @@
+var szMACROFOLDER = null
 var readAll = function(filePath,charset){
   var adTypeText = 2;
   var adReadAll = -1; //全行モード
@@ -23,8 +24,11 @@ function setCookieData(keyId,data){
     }
 }
 
-//iniファイルからマクロのHOME_DIRECTORYを取得
-(function loadMacroHomeDir(){
+/*
+* マクロのホームディレクトリを取得する
+* このマクロの配置している１階層上を取得しiniファイルに書き出す。
+*/
+function loadMacroHomeDir(){
     var cookie = Editor.getCookie("document","szMACROFOLDER")
     if(cookie){
        //自身のファイルを開き直した場合のみ取得可能。(タブ別管理）
@@ -36,8 +40,7 @@ function setCookieData(keyId,data){
     var MACRO_DIR_FILE = SAKURA_INI_PATH + "MACRO_DIR.ini"
     var fs = new ActiveXObject( "Scripting.FileSystemObject" );
     if(!fs.FileExists(MACRO_DIR_FILE)){
-       // var command = 'type "' + SAKURA_INI_FILE + '"|FINDSTR szMACROFOLDER>' + '"' + MACRO_DIR_FILE + '"';
-       var command = 'cd .. && (cd > "' + MACRO_DIR_FILE + '") && echo 初期設定完了'
+       var command = 'cd .. && (cd > "' + MACRO_DIR_FILE + '") && echo 初期設定完了(次回以降はこの出力は行われません。)'
        Editor.ExecCommand(command,0x01);
     }
     //変数取得
@@ -47,15 +50,22 @@ function setCookieData(keyId,data){
     szMACROFOLDER = szMACROFOLDER.substring(0,szMACROFOLDER.length);
     //cookieの保存
     Editor.setCookie("document","szMACROFOLDER",szMACROFOLDER)
-})();
+}
 
 (function(){
+    //マクロホームフォルダの取得
+    loadMacroHomeDir();
     // load用モジュール
     setCookieData("module",readAll(szMACROFOLDER + "/conf/module.js"));
 
     // 共通関数モジュール
     setCookieData("original",szMACROFOLDER + "/common/original.js");
     setCookieData("util",szMACROFOLDER + "/common/util.js");
+    setCookieData("Linux",szMACROFOLDER + "/common/Linux.js");
+    setCookieData("Random",szMACROFOLDER + "/common/Random.js");
     setCookieData("_",szMACROFOLDER + "/extLib/Underscore.js");
     setCookieData("_str",szMACROFOLDER + "/extLib/Underscore.string.js");
+    setCookieData("JSON",szMACROFOLDER + "/extLib/json2.js");
+    setCookieData("Array",szMACROFOLDER + "/extLib/Array-Polyfill.js");
+    setCookieData("Array",szMACROFOLDER + "/common/Linux.js");
 })();

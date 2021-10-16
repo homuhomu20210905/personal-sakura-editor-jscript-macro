@@ -83,39 +83,85 @@
         callBack(result,others);
         return this;
     }
-    JSON = {};
-    JSON.stringify = function(obj){
-        var res = '';
-        if(obj instanceof Array){
-            if(obj.length == 0){
-                return "[]";
-            }
-            res = "[";
-            for(var i=0;i < obj.length;i++){
-                res += JSON.stringify(obj[i]) + ',';
-            }
-            return res.substring(0,res.length - 1) + "]";
-        }else if(obj instanceof Function){
-            return obj.toString();
-        }else if(obj instanceof Object){
-            res = "{"
-            for(var key in obj){
-                res += '"' + key + '"' + ":" + JSON.stringify(obj[key]) + ",";
-            }
-            return res.substring(0,res.length - 1) + "}";
-        } else {
-            if(typeof obj == "string"){
-                return '"' + obj + '"';
-            }else if(obj){
-                return obj;
-            }else if( obj === undefined){
-                return undefined;
-            }else if( obj === null){
-                return null;
-            } 
+    
+    var newList = function(list){
+        var res = [];
+        for(var i=0;i < list.length;i++){
+            res.push(list[i]);
         }
+        return res;
     }
     
+    Sakura.prototype.rows = function(no,callBack){
+        var columns = [];
+        var others = [];
+        this.lines(function(strLine,i,origin){
+            columns.push(strLine);
+            others.push({line:strLine,no:i+1,origin:origin});
+            if(i % no == 0){
+                callBack.call(this.description,newList(columns),newList(others));
+                columns.length = 0;
+                others.length = 0;
+            }
+        });
+        if(columns.length > 0){
+            for(var i=0;i < (no - columns.length);i++){
+                columns.push("");
+                others.push({line:"",no:-1,origin:null});
+            }
+            callBack.call(this.description,newList(columns),newList(others));
+        }
+        return this;
+    }
+    
+    Sakura.prototype.rowAll = function(no,callBack){
+        var res = [];
+        var others = [];
+        this.rows(no,function(columns_,others_){
+            res.push(columns_);
+            others.push(others_);
+        });
+        callBack.call(this.description,res,others);
+        return this;
+    }
+    
+    //JSON = {};
+    //JSON.stringify = function(obj){
+    //    var res = '';
+    //    if(obj instanceof Array){
+    //        if(obj.length == 0){
+    //            return "[]";
+    //        }
+    //        res = "[";
+    //        for(var i=0;i < obj.length;i++){
+    //            res += JSON.stringify(obj[i]) + ',';
+    //        }
+    //        return res.substring(0,res.length - 1) + "]";
+    //    }else if(obj instanceof Function){
+    //        return obj.toString();
+    //    }else if(obj instanceof Object){
+    //        res = "{"
+    //        for(var key in obj){
+    //            res += '"' + key + '"' + ":" + JSON.stringify(obj[key]) + ",";
+    //        }
+    //        return res.substring(0,res.length - 1) + "}";
+    //    } else {
+    //        if(typeof obj == "string"){
+    //            return '"' + obj + '"';
+    //        }else if(obj){
+    //            return obj;
+    //        }else if( obj === undefined){
+    //            return undefined;
+    //        }else if( obj === null){
+    //            return null;
+    //        } 
+    //    }
+    //}
+    //JSON.parse = function(value){
+    //   var func = new Function("return " + value);
+    //   return func();
+    //}
+
     var setDescription = function(callBack){
         callBack.call(this.description,this.description);
         return this;
@@ -125,11 +171,6 @@
     Sakura.prototype.dataSet = setDescription
     Sakura.prototype.result  = setDescription
 
-    JSON.parse = function(value){
-       var func = new Function("return " + value);
-       return func();
-    }
-
     Sakura.getRunningTimeMs = function(){
         var endTime = (new Date()).getTime();
         return endTime - startTime;
@@ -138,5 +179,24 @@
     Sakura.putsRunningTime = function(){
         var second = Math.round(Sakura.getRunningTimeMs() / 100) / 10;
         puts("処理時間：" + second + "秒");
+    }
+    
+    var map = function(values,callBack){
+        var res = []
+        for(var i=0;i  < values.length;i++){
+            res.push(callBack(values[i],i,values));
+        }
+        return res;
+    }
+    Sakura.cursorCreateMenu = function(values){
+        var names = map(values,function(value){
+            return value.split(",").join("、");//表示時に半角カンマは使えないため全角にしておく。
+        });
+        var atai = Editor.CreateMenu(1,names.join(","));
+        
+        if(atai == "0"){
+            return null;
+        }
+        return {value:atai -1,name:values[atai -1]}
     }
 })()

@@ -1,0 +1,6 @@
+/** isbn */
+private String isbn;
+/** ƒ^ƒCƒgƒ‹ */
+private String title;
+/** ‰¿Ši */
+private int price;

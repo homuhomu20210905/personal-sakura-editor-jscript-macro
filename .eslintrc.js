@@ -21,5 +21,9 @@ module.exports = {
         'util':true,
         'JavaUtil':true,
         'szMACROFOLDER':true,
+        'R':true,
+        'Linux':true,
+        'GetCookie':true,
+        '_':true,
     }
 };

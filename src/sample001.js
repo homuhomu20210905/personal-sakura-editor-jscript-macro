@@ -29,3 +29,21 @@ Sakura()
     
 });
 
+
+// ..\data\sampledata.txtを開いて実行すると以下の値になります。
+// /** 顧客ID*/ 
+// private String customerId;
+// /** 顧客名*/ 
+// private String customerName;
+// /** 郵便番号*/ 
+// private String postalCode;
+// /** 都道府県*/ 
+// private String prefectures;
+// /** 市区町村*/ 
+// private String city;
+// /** その他住所*/ 
+// private String otherAddress;
+// /** 電話番号*/ 
+// private String phoneNumber;
+// /** メールアドレス*/ 
+// private String emailAddress;
