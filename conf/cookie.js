@@ -40,8 +40,7 @@ function loadMacroHomeDir(){
     var MACRO_DIR_FILE = SAKURA_INI_PATH + "MACRO_DIR.ini"
     var fs = new ActiveXObject( "Scripting.FileSystemObject" );
     if(!fs.FileExists(MACRO_DIR_FILE)){
-       var command = 'cd .. && (cd > "' + MACRO_DIR_FILE + '") && echo 初期設定完了(次回以降はこの出力は行われません。)'
-       Editor.ExecCommand(command,0x01);
+    	throw new Error("初期構築エラー!! ＜マクロホームフォルダ＞/init/init.batを実行してください。");
     }
     //変数取得
     var value = readAll(MACRO_DIR_FILE).split(/[\r\n]/g).join("")
